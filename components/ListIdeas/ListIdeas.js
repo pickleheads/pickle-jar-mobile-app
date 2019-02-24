@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import Idea from '../Idea';
 
@@ -11,7 +11,7 @@ export default class Ideas extends Component {
     const ideas = this.props.ideas || [];
     return (
       <ScrollView>
-        {ideas.map((idea, index) => <Idea key={index} idea={idea}/>)}
+        {ideas.map((idea, index) => <Idea key={index} idea={idea} onAction={this.props.fetchIdeas}/>)}
       </ScrollView>
     );
   }

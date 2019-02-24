@@ -5,6 +5,14 @@ const target = {
     endpoint: '/addIdea',
     method: 'POST',
   },
+  archiveIdea: {
+    endpoint: '/archiveIdea',
+    method: 'PUT',
+  },
+  deleteIdea: {
+    endpoint: '/deleteIdea',
+    method: 'DELETE',
+  },
   listIdeas: {
     endpoint: '/listIdeas',
     method: 'GET',
@@ -17,22 +25,24 @@ const api = new Proxy(target, {
     if (!config) {
       throw new Error(`Invalid API endpoint "${prop}"`);
     }
-    const url = `${BASE_URL}${config.endpoint}`;
-    return async body => {
-      if (config.method !== 'GET' && !body) {
-        throw new Error('Missing body for request');
+    let url = `${BASE_URL}${config.endpoint}`;
+    return async (options = {}) => {
+      const { body, query } = options;
+      const querystring = Object.entries(query).map(([key, value]) => `${key}=${value}`).join('&');
+      if (querystring) {
+        url += `?${querystring}`
       }
-      const response =  await fetch(url, {
+      const response = await fetch(url, {
         body: JSON.stringify(body),
         method: config.method,
         headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
-      if(!response.ok) {
+      if (!response.ok) {
         throw new Error(data.error.message);
       }
       return data;
-    }
+    };
   },
 });
 
