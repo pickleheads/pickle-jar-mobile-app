@@ -13,7 +13,9 @@ export default class AddIdea extends Component {
   async submit() {
     const idea = this.state.idea;
     this.setState({ idea: '' });
-    await api.addIdea({ idea });
+    const body = { idea };
+    const options = { body };
+    await api.addIdea(options);
     await this.props.fetchIdeas();
   }
 

@@ -1,7 +1,20 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { api } from '../api';
 
 export default class Idea extends Component {
+  async archiveIdea() {
+    const ideaId = this.props.idea._id;
+    await api.archiveIdea({ query: { ideaId } });
+    await this.props.onAction();
+  }
+
+  async deleteIdea() {
+    const ideaId = this.props.idea._id;
+    await api.deleteIdea({ query: { ideaId } });
+    await this.props.onAction();
+  }
+
   render() {
     const idea = this.props.idea;
     if (!idea) {
@@ -12,6 +25,11 @@ export default class Idea extends Component {
         <Text style={styles.text}>
           {idea.idea}
         </Text>
+        <Button title='Archive'
+                onPress={this.archiveIdea.bind(this)}/>
+        <Button color="red"
+                title='Delete'
+                onPress={this.deleteIdea.bind(this)}/>
       </View>
     );
   }
@@ -23,9 +41,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     backgroundColor: 'yellow',
     borderWidth: 1,
-    borderColor: 'black'
+    borderColor: 'black',
   },
   text: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
