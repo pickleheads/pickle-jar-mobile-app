@@ -15,7 +15,11 @@ export default class AddIdea extends Component {
     this.setState({ idea: '' });
     const body = { idea };
     const options = { body };
-    await api.addIdea(options);
+    try {
+      await api.addIdea(options);
+    } catch (e) {
+      alert(e);
+    }
     await this.props.fetchIdeas();
   }
 
